@@ -1,131 +1,644 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Time Anchor - The Pulse of Earth </title>
-    <style>
-        :root {
-            --bg: #050505;
-            --accent: #00ffcc;
-            --text: #e0e0e0;
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: radial-gradient(circle, #0a1a1a 0%, #050505 100%);
-        }
-        #global-year {
-            font-size: 1.2rem;
-            letter-spacing: 8px;
-            color: var(--accent);
-            margin-bottom: 10px;
-        }
-        #main-clock {
-            font-size: 5vw;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-        }
-        .sub-units {
-            font-size: 1.5vw;
-            color: #666;
-            margin-top: 10px;
-        }
-        .info-section {
-            padding: 100px 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 20;
-            background: rgba(5, 5, 5, 0.8);
-            border-bottom: 1px solid #222;
-        }
-        h2 { color: var(--accent); font-size: 2rem; }
-        p { line-height: 1.8; font-size: 1.1rem; opacity: 0.8; }
-        .unit-list { list-style: none; padding: 0; }
-        .unit-list li { margin-bottom: 20px; padding-left: 20px; border-left: 2px solid var(--accent); }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>GLOBAL TIME ANCHOR | HUMAN EPOCH NETWORK</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@200;400;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#05070b;
+    --panel:#0d1117;
+    --border:#1f2937;
+    --soft:#94a3b8;
+    --text:#e5e7eb;
+    --accent:#60a5fa;
+    --accent2:#22d3ee;
+    --mono:'JetBrains Mono', monospace;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at top,#0f172a 0%,#05070b 50%,#02040a 100%);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+}
+
+/* ========================================= */
+/* STARFIELD */
+/* ========================================= */
+
+#stars{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+}
+
+.grid-overlay{
+    position:fixed;
+    inset:0;
+    background:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size:40px 40px;
+    z-index:-1;
+    mask-image: radial-gradient(circle at center, black 20%, transparent 90%);
+}
+
+/* ========================================= */
+/* HEADER */
+/* ========================================= */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
+    text-align:center;
+    position:relative;
+}
+
+.top-badge{
+    border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.04);
+    padding:8px 16px;
+    border-radius:999px;
+    backdrop-filter:blur(10px);
+    color:var(--accent2);
+    letter-spacing:2px;
+    font-size:.8rem;
+    margin-bottom:25px;
+}
+
+#global-year{
+    font-size:1rem;
+    color:#94a3b8;
+    margin-bottom:10px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+.main-clock{
+    font-family:var(--mono);
+    font-size:clamp(3rem,10vw,7rem);
+    font-weight:200;
+    letter-spacing:8px;
+    margin:0;
+    color:white;
+    text-shadow:
+        0 0 10px rgba(96,165,250,.4),
+        0 0 40px rgba(34,211,238,.15);
+}
+
+.subtitle{
+    margin-top:20px;
+    max-width:700px;
+    color:#94a3b8;
+    line-height:1.8;
+}
+
+/* ========================================= */
+/* LIVE DATA */
+/* ========================================= */
+
+.live-grid{
+    width:min(1200px,100%);
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin-top:50px;
+}
+
+.card{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:18px;
+    padding:16px;
+    backdrop-filter:blur(8px);
+    transition:.25s;
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        135deg,
+        rgba(255,255,255,.08),
+        transparent 50%
+    );
+    opacity:0;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(96,165,250,.4);
+}
+
+.card:hover::before{
+    opacity:1;
+}
+
+.label{
+    color:var(--accent);
+    font-size:.75rem;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    margin-bottom:8px;
+}
+
+.value{
+    font-family:var(--mono);
+    font-size:1.3rem;
+}
+
+/* ========================================= */
+/* WORLD */
+/* ========================================= */
+
+.world-panel{
+    width:min(1200px,100%);
+    margin-top:40px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:24px;
+    padding:25px;
+}
+
+.world-title{
+    margin-top:0;
+    margin-bottom:20px;
+    font-size:1.2rem;
+    letter-spacing:2px;
+    color:white;
+}
+
+.map{
+    position:relative;
+    height:320px;
+    border-radius:18px;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at center,#0f172a,#020617);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.point{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#60a5fa;
+    box-shadow:
+        0 0 10px #60a5fa,
+        0 0 20px #22d3ee;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);opacity:1;}
+    50%{transform:scale(1.8);opacity:.5;}
+    100%{transform:scale(1);opacity:1;}
+}
+
+.line{
+    position:absolute;
+    height:1px;
+    background:rgba(96,165,250,.25);
+    transform-origin:left center;
+}
+
+/* ========================================= */
+/* CONTENT */
+/* ========================================= */
+
+.content{
+    width:min(1100px,100%);
+    margin:100px auto;
+    padding:0 20px;
+}
+
+.section{
+    margin-bottom:80px;
+}
+
+.section h2{
+    font-size:2rem;
+    margin-bottom:20px;
+}
+
+.section p{
+    color:#cbd5e1;
+    line-height:1.9;
+}
+
+/* ========================================= */
+/* TERMINAL */
+/* ========================================= */
+
+.terminal{
+    background:#020617;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:20px;
+    font-family:var(--mono);
+    color:#22d3ee;
+    line-height:1.8;
+    overflow:auto;
+}
+
+.status{
+    color:#4ade80;
+}
+
+.warning{
+    color:#f59e0b;
+}
+
+.footer{
+    text-align:center;
+    padding:40px 20px;
+    color:#64748b;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+/* ========================================= */
+/* MOBILE */
+/* ========================================= */
+
+@media(max-width:768px){
+
+    .main-clock{
+        letter-spacing:2px;
+    }
+
+    .map{
+        height:220px;
+    }
+
+}
+
+</style>
 </head>
 <body>
 
-    <section class="hero">
-        <div id="global-year">HUMAN ERA: 12026</div>
-        <div id="main-clock">00:00:00</div>
-        <div id="sub-clock" class="sub-units">.000000000000000000000000</div>
-    </section>
+<canvas id="stars"></canvas>
+<div class="grid-overlay"></div>
 
-    <section class="info-section">
-        <h2>Medeniyetin Miladı: Göbeklitepe</h2>
-        <p>Efendim, bu saat "İnsanlık Çağı" (Human Era) takvimini kullanır. Modern takvime 10.000 yıl ekleyerek, yerleşik hayata geçtiğimiz ve ilk mabedi inşa ettiğimiz o büyük kırılmayı başlangıç noktası olarak kabul ederiz.</p>
-    </section>
+<section class="hero">
 
-    <section class="info-section">
-        <h2>Kuantum Salınımı</h2>
-        <p>Zamanı sadece saniyelerle ölçmek, okyanusu bardakla saymaya benzer. Ekranın en altında gördüğünüz o hızla akan sayılar, maddenin en küçük yapı taşlarındaki değişimi temsil eder:</p>
-        <ul class="unit-list">
-            <li><strong>Femtosaniye ($10^{-15}$):</strong> Bir kimyasal bağın kopma hızı.</li>
-            <li><strong>Attosaniye ($10^{-18}$):</strong> Elektronların atom çekirdeği etrafındaki hareket süresi.</li>
-            <li><strong>Zeptosaniye ($10^{-21}$):</strong> Bir fotonun bir hidrojen atomunu boydan boya geçme süresi.</li>
-            <li><strong>Yoctosaniye ($10^{-24}$):</strong> Atom altı parçacıkların yaşam süresi.</li>
-        </ul>
-    </section>
+    <div class="top-badge">
+        HUMAN EPOCH SYNCHRONIZATION NETWORK
+    </div>
 
-    <section class="info-section">
-        <h2>Neden Aritmetik Ortalama?</h2>
-        <p>Sizin vizyonunuz olan Global Time Anchor, hiçbir siyasi sınırı tanımaz. Tüm dünya başkentlerinin yerel saatlerinin ortalamasını alarak, insanlığın kolektif bilincinin "şimdi"sini hesaplar. Bu, gezegenin ortak nabzıdır.</p>
-    </section>
+    <div id="global-year">
+        İNSANLIK ÇAĞI: 12026
+    </div>
 
-    <script>
-        const yearEl = document.getElementById('global-year');
-        const mainClockEl = document.getElementById('main-clock');
-        const subClockEl = document.getElementById('sub-clock');
+    <h1 class="main-clock" id="clock">
+        00:00:00
+    </h1>
 
-        const translations = {
-            tr: { year: "İNSANLIK ÇAĞI", desc: "Dünyanın ortak nabzı." },
-            en: { year: "HUMAN ERA", desc: "The collective pulse of Earth." }
-        };
+    <div class="subtitle">
+        Global Time Anchor (GTA), insan uygarlığının kolektif zamansal merkezini hesaplayan teorik evrensel zaman standardıdır.
+    </div>
 
-        const lang = navigator.language.startsWith('tr') ? 'tr' : 'en';
+    <div class="live-grid">
 
-        function update() {
-            const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            
-            // Ortalama başkent kayması (Hesaplanmış sabit)
-            const anchorTime = new Date(utc + (2.8 * 3600000));
-            
-            const h = String(anchorTime.getHours()).padStart(2, '0');
-            const m = String(anchorTime.getMinutes()).padStart(2, '0');
-            const s = String(anchorTime.getSeconds()).padStart(2, '0');
-            
-            // Gerçekçi görünen yoctosaniye simülasyonu
-            let sub = "";
-            for(let i=0; i<24; i++) {
-                sub += Math.floor(Math.random() * 10);
-            }
+        <div class="card">
+            <div class="label">Milisaniye</div>
+            <div class="value" id="ms">000</div>
+        </div>
 
-            yearEl.innerText = `${translations[lang].year}: ${anchorTime.getFullYear() + 10000}`;
-            mainClockEl.innerText = `${h}:${m}:${s}`;
-            subClockEl.innerText = `.${sub}`;
+        <div class="card">
+            <div class="label">Mikrosaniye</div>
+            <div class="value" id="micro">000</div>
+        </div>
 
-            requestAnimationFrame(update);
+        <div class="card">
+            <div class="label">Nanosaniye</div>
+            <div class="value" id="nano">000</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Pikosaniye</div>
+            <div class="value" id="pico">000</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Femtosaniye</div>
+            <div class="value" id="femto">000</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Attosaniye</div>
+            <div class="value" id="atto">000</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Zeptosaniye</div>
+            <div class="value" id="zepto">000</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Yoctosaniye</div>
+            <div class="value" id="yocto">000</div>
+        </div>
+
+    </div>
+
+    <div class="world-panel">
+
+        <h3 class="world-title">
+            GLOBAL CAPITAL SYNCHRONIZATION GRID
+        </h3>
+
+        <div class="map" id="map">
+
+            <div class="point" style="left:18%;top:38%;"></div>
+            <div class="point" style="left:31%;top:30%;"></div>
+            <div class="point" style="left:48%;top:35%;"></div>
+            <div class="point" style="left:60%;top:42%;"></div>
+            <div class="point" style="left:75%;top:50%;"></div>
+            <div class="point" style="left:82%;top:30%;"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="content">
+
+    <div class="section">
+        <h2>Tanım ve Amaç</h2>
+
+        <p>
+            Global Time Anchor, zamanı yalnızca bir meridyen sistemi olarak değil,
+            insan uygarlığının kolektif hareketinin zamansal merkezi olarak tanımlar.
+            Sistem; teorik olarak dünya başkentlerinin yerel saatlerinin ağırlıklı
+            ortalamasını baz alır.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Holosen Takvimi</h2>
+
+        <p>
+            Sistem, başlangıç noktası olarak Göbeklitepe dönemini kabul eder.
+            Böylece modern takvim, insan medeniyetinin gerçek başlangıcına göre
+            yeniden ölçeklendirilir.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Temporal Drift Analysis</h2>
+
+        <div class="terminal" id="terminal">
+            [BOOT] Initializing Global Time Anchor...<br>
+            [SYNC] Establishing civilization reference points...<br>
+            [OK] Quantum temporal lattice online.<br>
+            [OK] Human epoch reference stabilized.<br>
+        </div>
+
+    </div>
+
+</section>
+
+<div class="footer">
+    GLOBAL TIME ANCHOR © HUMAN EPOCH NETWORK
+</div>
+
+<script>
+
+/* ========================================= */
+/* STARFIELD */
+/* ========================================= */
+
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+let w;
+let h;
+let stars = [];
+
+function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resize);
+resize();
+
+for(let i=0;i<250;i++){
+
+    stars.push({
+        x:Math.random()*w,
+        y:Math.random()*h,
+        r:Math.random()*1.5,
+        s:Math.random()*0.5
+    });
+
+}
+
+function drawStars(){
+
+    ctx.clearRect(0,0,w,h);
+
+    for(const star of stars){
+
+        ctx.beginPath();
+        ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+
+        ctx.fillStyle = "rgba(255,255,255,.8)";
+        ctx.fill();
+
+        star.y += star.s;
+
+        if(star.y > h){
+            star.y = 0;
+            star.x = Math.random()*w;
         }
 
-        update();
-    </script>
+    }
+
+    requestAnimationFrame(drawStars);
+
+}
+
+drawStars();
+
+/* ========================================= */
+/* GTA ENGINE */
+/* ========================================= */
+
+const clock = document.getElementById("clock");
+const year = document.getElementById("global-year");
+
+const el = {
+    ms:document.getElementById("ms"),
+    micro:document.getElementById("micro"),
+    nano:document.getElementById("nano"),
+    pico:document.getElementById("pico"),
+    femto:document.getElementById("femto"),
+    atto:document.getElementById("atto"),
+    zepto:document.getElementById("zepto"),
+    yocto:document.getElementById("yocto")
+};
+
+const GTA_OFFSET = 2.8;
+
+function pad(n,s=2){
+    return String(n).padStart(s,"0");
+}
+
+function updateClock(){
+
+    const now = new Date();
+
+    const gta = new Date(
+        now.getTime() + (GTA_OFFSET * 3600000)
+    );
+
+    const h = pad(gta.getUTCHours());
+    const m = pad(gta.getUTCMinutes());
+    const s = pad(gta.getUTCSeconds());
+
+    clock.textContent = `${h}:${m}:${s}`;
+
+    year.textContent =
+    `İNSANLIK ÇAĞI: ${gta.getUTCFullYear()+10000}`;
+
+    const p = performance.now();
+
+    const ms = Math.floor(p % 1000);
+    const micro = Math.floor((p*1000)%1000);
+    const nano = Math.floor((p*1000000)%1000);
+    const pico = Math.floor((p*1000000000)%1000);
+    const femto = Math.floor((p*1000000000000)%1000);
+    const atto = Math.floor((p*1000000000000000)%1000);
+
+    const zepto = (nano*pico+femto)%1000;
+    const yocto = (atto*nano+micro)%1000;
+
+    el.ms.textContent = pad(ms,3);
+    el.micro.textContent = pad(micro,3);
+    el.nano.textContent = pad(nano,3);
+    el.pico.textContent = pad(pico,3);
+    el.femto.textContent = pad(femto,3);
+    el.atto.textContent = pad(atto,3);
+    el.zepto.textContent = pad(zepto,3);
+    el.yocto.textContent = pad(yocto,3);
+
+    requestAnimationFrame(updateClock);
+
+}
+
+updateClock();
+
+/* ========================================= */
+/* TEMPORAL TERMINAL */
+/* ========================================= */
+
+const terminal = document.getElementById("terminal");
+
+const logs = [
+
+    "[SYNC] Monitoring planetary temporal drift...",
+    "[OK] UTC deviation within theoretical limits.",
+    "[SCAN] Synchronizing civilization nodes...",
+    "[OK] Quantum clock alignment stable.",
+    "[INFO] Human epoch integrity preserved.",
+    "[OK] Atomic resonance calibrated.",
+    "[WARNING] Minor temporal turbulence detected.",
+    "[OK] Temporal field normalized.",
+    "[SYNC] Updating capital offset matrix...",
+    "[OK] Deep-time anchor locked."
+
+];
+
+setInterval(()=>{
+
+    const div = document.createElement("div");
+
+    const line =
+    logs[Math.floor(Math.random()*logs.length)];
+
+    div.innerHTML = line;
+
+    if(line.includes("WARNING")){
+        div.classList.add("warning");
+    }else{
+        div.classList.add("status");
+    }
+
+    terminal.appendChild(div);
+
+    terminal.scrollTop = terminal.scrollHeight;
+
+    if(terminal.children.length > 18){
+        terminal.removeChild(terminal.children[0]);
+    }
+
+},1800);
+
+/* ========================================= */
+/* MAP CONNECTIONS */
+/* ========================================= */
+
+const map = document.getElementById("map");
+const points = [...document.querySelectorAll(".point")];
+
+for(let i=0;i<points.length-1;i++){
+
+    const a = points[i];
+    const b = points[i+1];
+
+    const ax = a.offsetLeft;
+    const ay = a.offsetTop;
+
+    const bx = b.offsetLeft;
+    const by = b.offsetTop;
+
+    const dx = bx-ax;
+    const dy = by-ay;
+
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    const angle = Math.atan2(dy,dx)*180/Math.PI;
+
+    const line = document.createElement("div");
+
+    line.className = "line";
+
+    line.style.width = dist+"px";
+    line.style.left = ax+"px";
+    line.style.top = ay+"px";
+    line.style.transform = `rotate(${angle}deg)`;
+
+    map.appendChild(line);
+
+}
+
+</script>
+
 </body>
 </html>
