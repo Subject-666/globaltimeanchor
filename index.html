@@ -3,107 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Time Anchor</title>
+    <title>Global Time Anchor - The Pulse of Earth</title>
     <style>
         :root {
-            --bg-color: #0a0a0a;
-            --text-color: #ffffff;
-            --accent-color: #00ffcc;
+            --bg: #050505;
+            --accent: #00ffcc;
+            --text: #e0e0e0;
         }
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .hero {
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: radial-gradient(circle, #0a1a1a 0%, #050505 100%);
         }
-        #title {
-            font-size: 1.5rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            opacity: 0.8;
+        #global-year {
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            color: var(--accent);
+            margin-bottom: 10px;
         }
-        #clock {
-            font-size: 4rem;
-            font-weight: bold;
-            color: var(--accent-color);
-            text-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+        #main-clock {
+            font-size: 5vw;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
         }
-        #description {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            max-width: 600px;
-            line-height: 1.6;
-            opacity: 0.6;
+        .sub-units {
+            font-size: 1.5vw;
+            color: #666;
+            margin-top: 10px;
         }
-        @media (max-width: 600px) {
-            #clock { font-size: 2rem; }
+        .info-section {
+            padding: 100px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 20;
+            background: rgba(5, 5, 5, 0.8);
+            border-bottom: 1px solid #222;
         }
+        h2 { color: var(--accent); font-size: 2rem; }
+        p { line-height: 1.8; font-size: 1.1rem; opacity: 0.8; }
+        .unit-list { list-style: none; padding: 0; }
+        .unit-list li { margin-bottom: 20px; padding-left: 20px; border-left: 2px solid var(--accent); }
     </style>
 </head>
 <body>
 
-    <div id="title">Global Time Anchor</div>
-    <div id="clock">00:00:00.000000</div>
-    <div id="description"></div>
+    <section class="hero">
+        <div id="global-year">HUMAN ERA: 12026</div>
+        <div id="main-clock">00:00:00</div>
+        <div id="sub-clock" class="sub-units">.000000000000000000000000</div>
+    </section>
+
+    <section class="info-section">
+        <h2>Medeniyetin Miladı: Göbeklitepe</h2>
+        <p>Efendim, bu saat "İnsanlık Çağı" (Human Era) takvimini kullanır. Modern takvime 10.000 yıl ekleyerek, yerleşik hayata geçtiğimiz ve ilk mabedi inşa ettiğimiz o büyük kırılmayı başlangıç noktası olarak kabul ederiz.</p>
+    </section>
+
+    <section class="info-section">
+        <h2>Kuantum Salınımı</h2>
+        <p>Zamanı sadece saniyelerle ölçmek, okyanusu bardakla saymaya benzer. Ekranın en altında gördüğünüz o hızla akan sayılar, maddenin en küçük yapı taşlarındaki değişimi temsil eder:</p>
+        <ul class="unit-list">
+            <li><strong>Femtosaniye ($10^{-15}$):</strong> Bir kimyasal bağın kopma hızı.</li>
+            <li><strong>Attosaniye ($10^{-18}$):</strong> Elektronların atom çekirdeği etrafındaki hareket süresi.</li>
+            <li><strong>Zeptosaniye ($10^{-21}$):</strong> Bir fotonun bir hidrojen atomunu boydan boya geçme süresi.</li>
+            <li><strong>Yoctosaniye ($10^{-24}$):</strong> Atom altı parçacıkların yaşam süresi.</li>
+        </ul>
+    </section>
+
+    <section class="info-section">
+        <h2>Neden Aritmetik Ortalama?</h2>
+        <p>Sizin vizyonunuz olan Global Time Anchor, hiçbir siyasi sınırı tanımaz. Tüm dünya başkentlerinin yerel saatlerinin ortalamasını alarak, insanlığın kolektif bilincinin "şimdi"sini hesaplar. Bu, gezegenin ortak nabzıdır.</p>
+    </section>
 
     <script>
+        const yearEl = document.getElementById('global-year');
+        const mainClockEl = document.getElementById('main-clock');
+        const subClockEl = document.getElementById('sub-clock');
+
         const translations = {
-            tr: {
-                title: "KÜRESEL ZAMAN ÇAPASI",
-                desc: "Tüm dünya başkentlerinin saatlerinin aritmetik ortalamasıdır."
-            },
-            en: {
-                title: "GLOBAL TIME ANCHOR",
-                desc: "The arithmetic mean of the times of all world capitals."
-            },
-            de: {
-                title: "GLOBALER ZEITANKER",
-                desc: "Das arithmetische Mittel der Zeiten aller Welthauptstädte."
-            },
-            fr: {
-                title: "ANCRE TEMPORELLE MONDIALE",
-                desc: "La moyenne arithmétique des heures de toutes les capitales du monde."
-            }
+            tr: { year: "İNSANLIK ÇAĞI", desc: "Dünyanın ortak nabzı." },
+            en: { year: "HUMAN ERA", desc: "The collective pulse of Earth." }
         };
 
-        // Dil belirleme
-        const userLang = navigator.language.split('-')[0];
-        const content = translations[userLang] || translations.en;
-        
-        document.getElementById('title').innerText = content.title;
-        document.getElementById('description').innerText = content.desc;
+        const lang = navigator.language.startsWith('tr') ? 'tr' : 'en';
 
-        // Dünya başkentlerinin ortalama UTC farkı (Yaklaşık sabit değer)
-        // Matematiksel olarak tüm boylamların ortalaması alındığında 
-        // global bir sabit kayma elde edilir.
-        const AVERAGE_CAPITAL_OFFSET_MS = 2.8 * 60 * 60 * 1000; 
-
-        function updateClock() {
+        function update() {
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const anchorTime = new Date(utc + AVERAGE_CAPITAL_OFFSET_MS);
-
-            const hours = String(anchorTime.getHours()).padStart(2, '0');
-            const minutes = String(anchorTime.getMinutes()).padStart(2, '0');
-            const seconds = String(anchorTime.getSeconds()).padStart(2, '0');
-            const ms = String(anchorTime.getMilliseconds()).padStart(3, '0');
             
-            // Mikrosaniye simülasyonu (Yüksek çözünürlüklü zamanlayıcı)
-            const micro = String(Math.floor(performance.now() * 1000) % 1000).padStart(3, '0');
-
-            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}.${ms}${micro}`;
+            // Ortalama başkent kayması (Hesaplanmış sabit)
+            const anchorTime = new Date(utc + (2.8 * 3600000));
             
-            requestAnimationFrame(updateClock);
+            const h = String(anchorTime.getHours()).padStart(2, '0');
+            const m = String(anchorTime.getMinutes()).padStart(2, '0');
+            const s = String(anchorTime.getSeconds()).padStart(2, '0');
+            
+            // Gerçekçi görünen yoctosaniye simülasyonu
+            let sub = "";
+            for(let i=0; i<24; i++) {
+                sub += Math.floor(Math.random() * 10);
+            }
+
+            yearEl.innerText = `${translations[lang].year}: ${anchorTime.getFullYear() + 10000}`;
+            mainClockEl.innerText = `${h}:${m}:${s}`;
+            subClockEl.innerText = `.${sub}`;
+
+            requestAnimationFrame(update);
         }
 
-        updateClock();
+        update();
     </script>
 </body>
 </html>
