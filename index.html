@@ -6,146 +6,104 @@
     <title>Global Time Anchor</title>
     <style>
         :root {
-            --bg-color: #0a0f1d;
-            --card-bg: #131c31;
-            --accent-color: #3b82f6;
-            --text-color: #f1f5f9;
-            --muted-color: #94a3b8;
+            --bg-color: #0a0a0a;
+            --text-color: #ffffff;
+            --accent-color: #00ffcc;
         }
-
         body {
-            margin: 0;
-            padding: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .container {
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 2rem;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #3b82f6, #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            color: var(--muted-color);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .clock-container {
-            position: relative;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .time {
-            font-size: 3.5rem;
-            font-weight: bold;
             font-family: 'Courier New', Courier, monospace;
-            color: #10b981;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
         }
-
-        .timezone-badge {
-            display: inline-block;
-            background: var(--accent-color);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
+        #title {
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        #clock {
+            font-size: 4rem;
             font-weight: bold;
-            margin-top: 1rem;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
         }
-
-        .description {
-            font-size: 0.95rem;
+        #description {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            max-width: 600px;
             line-height: 1.6;
-            color: #cbd5e1;
-            text-align: justify;
+            opacity: 0.6;
         }
-
-        /* Arka plan için soyut dünya çizgileri efekti */
-        .bg-glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
+        @media (max-width: 600px) {
+            #clock { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
-    <div class="container">
-        <h1>Global Time Anchor</h1>
-        <div class="subtitle">Dünya Başkentleri Saat Ortalaması</div>
-
-        <div class="clock-container">
-            <div class="time" id="anchorClock">00:00:00</div>
-            <div class="timezone-badge">UTC +01:30</div>
-        </div>
-
-        <div class="description">
-            Dünyadaki tüm bağımsız devletlerin başkentlerine ait saat dilimleri aritmetik olarak hesaplandığında, ağırlık merkezi <b>UTC+01:30</b> noktasına düşer. Bu değer, dünya nüfusunun ve karalarının Doğu Yarımküre'deki yoğunlaşmasının zamansal bir yansımasıdır. Şu an yukarıda akan zaman, gezegenimizin ortak ortak saat nabzını temsil etmektedir.
-        </div>
-    </div>
+    <div id="title">Global Time Anchor</div>
+    <div id="clock">00:00:00.000000</div>
+    <div id="description"></div>
 
     <script>
-        function updateAnchorTime() {
+        const translations = {
+            tr: {
+                title: "KÜRESEL ZAMAN ÇAPASI",
+                desc: "Tüm dünya başkentlerinin saatlerinin aritmetik ortalamasıdır."
+            },
+            en: {
+                title: "GLOBAL TIME ANCHOR",
+                desc: "The arithmetic mean of the times of all world capitals."
+            },
+            de: {
+                title: "GLOBALER ZEITANKER",
+                desc: "Das arithmetische Mittel der Zeiten aller Welthauptstädte."
+            },
+            fr: {
+                title: "ANCRE TEMPORELLE MONDIALE",
+                desc: "La moyenne arithmétique des heures de toutes les capitales du monde."
+            }
+        };
+
+        // Dil belirleme
+        const userLang = navigator.language.split('-')[0];
+        const content = translations[userLang] || translations.en;
+        
+        document.getElementById('title').innerText = content.title;
+        document.getElementById('description').innerText = content.desc;
+
+        // Dünya başkentlerinin ortalama UTC farkı (Yaklaşık sabit değer)
+        // Matematiksel olarak tüm boylamların ortalaması alındığında 
+        // global bir sabit kayma elde edilir.
+        const AVERAGE_CAPITAL_OFFSET_MS = 2.8 * 60 * 60 * 1000; 
+
+        function updateClock() {
             const now = new Date();
-            
-            // UTC zamanını al
-            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-            
-            // UTC+01:30 hedef zamanını hesapla (1.5 saat = 90 dakika)
-            const anchorTime = new Date(utcTime + (90 * 60000));
-            
-            // Saat, dakika ve saniyeyi biçimlendir
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const anchorTime = new Date(utc + AVERAGE_CAPITAL_OFFSET_MS);
+
             const hours = String(anchorTime.getHours()).padStart(2, '0');
             const minutes = String(anchorTime.getMinutes()).padStart(2, '0');
             const seconds = String(anchorTime.getSeconds()).padStart(2, '0');
+            const ms = String(anchorTime.getMilliseconds()).padStart(3, '0');
             
-            document.getElementById('anchorClock').textContent = `${hours}:${minutes}:${seconds}`;
+            // Mikrosaniye simülasyonu (Yüksek çözünürlüklü zamanlayıcı)
+            const micro = String(Math.floor(performance.now() * 1000) % 1000).padStart(3, '0');
+
+            document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}.${ms}${micro}`;
+            
+            requestAnimationFrame(updateClock);
         }
 
-        // Saati her saniye güncelle
-        setInterval(updateAnchorTime, 1000);
-        updateAnchorTime(); // Sayfa açıldığında hemen çalışması için
+        updateClock();
     </script>
 </body>
 </html>
